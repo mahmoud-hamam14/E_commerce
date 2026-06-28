@@ -1,10 +1,13 @@
-import 'package:e_commerce/screens/home/models/product_card_model.dart';
+import 'package:e_commerce/apis/models/product_model/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product});
 
-  final ProductCardModel product;
+  final Product product;
+
+  double get discountedPrice =>
+      product.price! - (product.discountPercentage! * product.price!) / 100;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +27,14 @@ class ProductCard extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             /// Image
             Stack(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    product.image,
+                  child: Image.network(
+                    '${product.thumbnail}',
                     height: MediaQuery.of(context).size.height * .2,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -53,7 +55,7 @@ class ProductCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Text(
-                      product.discount,
+                      '${product.discountPercentage}%',
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 12,
@@ -79,7 +81,7 @@ class ProductCard extends StatelessWidget {
 
             /// Brand
             Text(
-              product.brandName,
+              '${product.brand}',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 12,
@@ -91,7 +93,7 @@ class ProductCard extends StatelessWidget {
 
             /// Name
             Text(
-              product.productName,
+              '${product.title}',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
@@ -106,7 +108,7 @@ class ProductCard extends StatelessWidget {
 
                 SizedBox(width: 6),
                 Text(
-                  product.rating,
+                  '${product.rating}',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                 ),
               ],
@@ -118,14 +120,14 @@ class ProductCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  product.price,
+                  '\$${discountedPrice.toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
 
                 const SizedBox(width: 8),
 
                 Text(
-                  product.oldPrice,
+                  product.price!.toStringAsFixed(2),
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 12,
@@ -137,8 +139,6 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-
-            // const Spacer(),
           ],
         ),
       ),

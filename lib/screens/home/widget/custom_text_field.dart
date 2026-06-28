@@ -9,11 +9,11 @@ class CustomTextField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: TextField(
         decoration: InputDecoration(
-          hintText: 'Search phones, laptops, more...',
+          hintText: 'Search...',
           hintStyle: TextStyle(color: Color(0xFF6B7280), fontSize: 15),
           prefixIcon: Icon(Icons.search, color: Color(0xFF6B7280), size: 22),
           filled: true,
-          fillColor: Color(0xFFF9FAFB),
+          fillColor: Colors.grey.shade200,
           contentPadding: const EdgeInsets.symmetric(vertical: 14),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),

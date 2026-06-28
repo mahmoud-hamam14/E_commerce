@@ -1,17 +1,35 @@
+import 'package:dio/dio.dart';
+import 'package:e_commerce/screens/home/views/categories_screen.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CategoriesSection extends StatelessWidget {
-  CategoriesSection({super.key});
+class CategoriesSection extends StatefulWidget {
+  const CategoriesSection({super.key});
 
-  List<String> categorieTitle = [
-    'Laptops',
-    'Tablets',
-    'Audio',
-    'Laptops',
-    'Tablets',
-    'Audio',
-  ];
+  @override
+  State<CategoriesSection> createState() => _CategoriesSectionState();
+}
+
+class _CategoriesSectionState extends State<CategoriesSection> {
+  List categories = [];
+
+  Future<void> getCategories() async {
+    final Dio dio = Dio();
+
+    final response = await dio.get('https://dummyjson.com/products/categories');
+
+    List myCategories = response.data;
+
+    categories = myCategories;
+
+    setState(() {});
+  }
+
+  @override
+  initState() {
+    super.initState();
+    getCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,23 +51,35 @@ class CategoriesSection extends StatelessWidget {
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: categorieTitle.length,
+              itemCount: categories.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xFFF3F4F6)),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Text(
-                    categorieTitle[index],
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF374151),
-                      fontWeight: FontWeight.w700,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoriesScreen(
+                          categoryName: categories[index]['name'],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFFF3F4F6)),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Text(
+                      categories[index]['name'],
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF374151),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 );

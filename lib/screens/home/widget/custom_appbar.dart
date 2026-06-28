@@ -44,7 +44,8 @@ class CustomAppbar extends StatelessWidget {
             iconSize: 24,
             style: IconButton.styleFrom(backgroundColor: Color(0xFFF9FAFB)),
 
-            onPressed: () {},
+            onPressed: () {
+            },
             icon: const Icon(
               Icons.notifications_none_outlined,
               color: Color(0xFF374151),
@@ -71,4 +72,7 @@ class CustomAppbar extends StatelessWidget {
       ),
     );
   }
+
+  
+  
 }

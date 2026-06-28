@@ -1,49 +1,35 @@
-import 'package:e_commerce/screens/home/models/product_card_model.dart';
+import 'package:dio/dio.dart';
+import 'package:e_commerce/apis/models/product_model/product.dart';
 import 'package:e_commerce/screens/home/views/product_details_screen.dart';
-import 'package:e_commerce/screens/home/widget/product_card.dart';
+import 'package:e_commerce/screens/home/widget/product_card_grid_view.dart';
 import 'package:flutter/material.dart';
 
-class FeaturedGridView extends StatelessWidget {
-  FeaturedGridView({super.key});
+class FeaturedGridView extends StatefulWidget {
+  const FeaturedGridView({super.key});
 
-  final List<ProductCardModel> products = [
-    ProductCardModel(
-      image: 'assets/product1.png',
-      productName: 'Essence Mascara Lash Princess',
-      brandName: 'ESSENCE',
-      price: '\$8.94',
-      oldPrice: '\$12.94',
-      discount: '-10%',
-      rating: '2.5',
-    ),
-    ProductCardModel(
-      image: 'assets/product2.png',
-      productName: 'Essence Mascara Lash Princess',
-      brandName: 'ESSENCE',
-      price: '\$8.94',
-      oldPrice: '\$12.94',
-      discount: '-10%',
-      rating: '2.5',
-    ),
-    ProductCardModel(
-      image: 'assets/product1.png',
-      productName: 'Essence Mascara Lash Princess',
-      brandName: 'ESSENCE',
-      price: '\$8.94',
-      oldPrice: '\$12.94',
-      discount: '-10%',
-      rating: '2.5',
-    ),
-    ProductCardModel(
-      image: 'assets/product2.png',
-      productName: 'Essence Mascara Lash Princess',
-      brandName: 'ESSENCE',
-      price: '\$8.94',
-      oldPrice: '\$12.94',
-      discount: '-10%',
-      rating: '2.5',
-    ),
-  ];
+  @override
+  State<FeaturedGridView> createState() => _FeaturedGridViewState();
+}
+
+class _FeaturedGridViewState extends State<FeaturedGridView> {
+  final List<Product> products = [];
+
+  Future<void> getProduct() async {
+    final dio = Dio();
+    final response = await dio.get('https://dummyjson.com/products');
+
+    for (var element in response.data['products']) {
+      final product = Product.fromJson(element);
+      products.add(product);
+    }
+    setState(() {});
+  }
+
+  @override
+  initState() {
+    super.initState();
+    getProduct();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +40,7 @@ class FeaturedGridView extends StatelessWidget {
           MaterialPageRoute(builder: (context) => const ProductDetailsScreen()),
         );
       },
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: products.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: .48,
-        ),
-        itemBuilder: (context, index) {
-          return ProductCard(product: products[index]);
-        },
-      ),
+      child: ProductCardGridView(products: products),
     );
   }
 }
